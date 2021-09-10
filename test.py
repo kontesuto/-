@@ -1,4 +1,4 @@
-# モジュールの読み込み
+# モジュールの読み込みqqqqq
 from bs4.element import Script
 import requests
 # import json
