@@ -1,6 +1,6 @@
 1.zap setup
 
-2.proxy setup
+2.proxy setup (by registry)
 2-1.reg export "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" C:\RegKeyBackup.reg /y
 2-2.reg delete "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /f
 2-3.reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1
