@@ -1,0 +1,22 @@
+1.zap setup
+
+2.proxy setup
+2-1.reg export "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" C:\RegKeyBackup.reg /y
+2-2.reg delete "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /f
+2-3.reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1
+2-4.reg delete "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyServer /f
+2-5.reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyServer /t REG_SZ /d "127.0.0.1:8080"
+2-6.reg delete "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyOverride /f
+2-7.reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyOverride /t REG_SZ /d "<-loopback>"
+
+3.chrome://net-internals/#hsts delete domain security policies
+
+4.close chrome
+
+5.zap scan
+
+6.chrome://net-internals/#hsts add hsts domain
+
+7.proxy recover
+7-1.reg import C:\RegKeyBackup.reg
+7-2.del /f C:\RegKeyBackup.reg
