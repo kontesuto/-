@@ -5,20 +5,20 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 
-# Prepare webdriver & browser(Chrome)
+# webdriver & browser(Chrome) 準備
 driver = webdriver.Chrome(ChromeDriverManager().install())
 
-# # Prepare webdriver & browser(Headless Chrome)
+# # webdriver & browser(Headless Chrome)　準備
 # chrome_options = webdriver.ChromeOptions()
 # chrome_options.headless = True
 # driver = webdriver.Chrome(ChromeDriverManager().install(),options=chrome_options)
 
-# Set up start domain
+# ドメインを指定
 start_domain = "http://localhost:3000/"
 
-# Parsing URL
-# Make URL into "http://" + URL + "/" pattern
-# Save parsed url into current_url
+# URLを整形
+# "http://" + URL + "/"
+# 整形したurlをcurrent_urlに保存
 current_url = start_domain
 if not current_url.startswith("http://"):
     if not current_url.startswith("https://"):
@@ -26,23 +26,23 @@ if not current_url.startswith("http://"):
 if not current_url.endswith("/"):
     current_url = current_url + "/"
 
-# url_collector & raw_url_collector
+# 整形したurl_collectorリストと未整形のraw_url_collectorリスト
 url_collector = []
 url_collector.append(current_url)
 raw_url_collector = []
 raw_url_collector.append(start_domain)
 
-# Test parsed url
+# 整形したurlをテスト、失敗の場合はプログラムを停止
 r = requests.get(current_url)
 if r.status_code != requests.codes.ok:
     print("URL incorrect!")
     exit()
 
-# Open URL by Chrome using webdriver
+# webdriver(Chrome)でURLを開く
 driver.get(start_domain)
 time.sleep(5)
 
-# Get rendered html source code
+# htmlソースコードを保存
 html = driver.page_source
 time.sleep(5)
 
@@ -77,10 +77,9 @@ time.sleep(5)
 
 
 
-# Pull out all "href" attribute
-# Testing each URLs by using requests.py in try:
-# item will be pass into except: if requests.py raise a error
-# if the response status code is 200(success), item will be added in url_collector
+# ソースコードの中の"href"属性を取り出す
+# 所得したURLをテスト
+# 200(success)が出たら,url_collectorリストに保存
 for item in str(html).split(" "):
     if "href=" in item:
         item = item.split("\"",2)[1]
@@ -92,20 +91,20 @@ for item in str(html).split(" "):
             if r.status_code == requests.codes.ok:
                 url_collector.append(item)
                 continue
-# If failed, Try turning all URL into valid URL
-# Maxium try limit: 2
+# 失敗の場合, URLを整形して試す
+# max_try整形して試す回数: 2
         max_try = 2
         current_try = 0
         while current_try <= max_try:
             current_try += 1
-# Possible href patterns causing fail:
+# 整形が必要なURL:
 # 0. //url
 # 1. /sub-url
 # 2. ./sub-url
 # 3. ../sub-url
 # 4. #/sub-url
 # 5. sub-url
-# Change above to: http://url/
+# 以上のURLを　http://url/　のパターンに整形してみる
 # Fix 0~4.
             # Fix 0.
             if item.startswith("//"):
@@ -122,8 +121,8 @@ for item in str(html).split(" "):
             # Fix 4.
             elif item.startswith("#/"):
                 item = current_url + item
-# Test fixed URLs by using response status code (requests.codes.ok)
-# Fix 5. in except
+# 整形したURLをテスト( if r.status_code == requests.codes.ok)
+# Fix 5.はexceptの中にやる
             try:
                 r = requests.get(item)
             except:
@@ -140,7 +139,7 @@ for item in str(html).split(" "):
 
 
 
-# # Print out final output then closing chrome and python
+# # 結果をプリントしてプログラムを終了
 # for url in url_collector:
 #     print(url,end="\n")
 # driver.quit()
