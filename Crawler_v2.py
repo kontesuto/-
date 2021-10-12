@@ -5,8 +5,8 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 
-# Cralwer 関数（ドメインを指定）
-def Cralwer(start_domain):
+# Crawler 関数（ドメインを指定）
+def Crawler(start_domain):
 
     # # webdriver & browser(Chrome) 準備 (ディバグ用コード)
     # driver = webdriver.Chrome(ChromeDriverManager().install())
